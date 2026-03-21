@@ -4,20 +4,18 @@ import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
 
-type HabitCardProps = { isCompleted: boolean } & Omit<Habit, "daysCompleted">;
+type HabitCardProps = { isCompleted: boolean; color: string } & Omit<Habit, "daysCompleted">;
 
-export function HabitCard({ name, description, icon, isCompleted }: HabitCardProps) {
+export function HabitCard({ name, description, icon, isCompleted, color }: HabitCardProps) {
 	const mutedColor = useThemeColor("muted");
 
 	return (
 		<PressableFeedback
-			className={cn("w-[49%] min-h-[110px] rounded-[16px] p-3 bg-ht-yellow", {
-				"bg-[#f2f2f3]": isCompleted,
-			})}
-			style={{ borderCurve: "continuous" }}
+			className="w-[49%] min-h-[110px] rounded-[16px] p-3"
+			style={{ borderCurve: "continuous", backgroundColor: isCompleted ? "#f2f2f3" : color }}
 		>
 			<View className="flex-row items-start justify-between">
-				<Icon name={icon} size={24} color={isCompleted ? mutedColor : "#000"} />
+				<Icon name={icon} size={26} color={isCompleted ? mutedColor : "#000"} />
 				<Checkbox
 					isSelected={isCompleted}
 					className="size-5 rounded-full border-[1.5px] border-black bg-transparent"
@@ -37,7 +35,7 @@ export function HabitCard({ name, description, icon, isCompleted }: HabitCardPro
 					{name}
 				</Text>
 				<Text
-					className={cn("font-ob-regular text-sm text-foreground", { "text-muted": isCompleted })}
+					className={cn("font-ob-regular text-xs text-foreground", { "text-muted": isCompleted })}
 				>
 					{description}
 				</Text>

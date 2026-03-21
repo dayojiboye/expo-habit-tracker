@@ -63,6 +63,7 @@
 			--ht-pink: #fc8fc6;
 			--ht-orange: #f0935b;
 			--ht-teal: #b7e6e6;
+			--ht-light-blue: #aac6f9;
 
 			--default: oklch(94% 0.001 286.375);
 			--default-foreground: var(--eclipse);
@@ -134,6 +135,7 @@
 			--ht-pink: #fc8fc6;
 			--ht-orange: #f0935b;
 			--ht-teal: #b7e6e6;
+			--ht-light-blue: #aac6f9;
 
 			--default: oklch(27.4% 0.006 286.033);
 			--default-foreground: var(--snow);
@@ -182,4 +184,5 @@
 	--color-ht-pink: var(--ht-pink);
 	--color-ht-orange: var(--ht-orange);
 	--color-ht-teal: var(--ht-teal);
+	--color-ht-light-blue: var(--ht-light-blue);
 }

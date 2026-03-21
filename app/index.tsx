@@ -5,11 +5,22 @@ import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { ScrollView, Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { withUniwind } from "uniwind";
+import { useCSSVariable, withUniwind } from "uniwind";
 
 const StyledSafeAreaView = withUniwind(SafeAreaView);
 
+const COLOR_VARS = [
+	"--color-ht-yellow",
+	"--color-ht-green",
+	"--color-ht-orange",
+	"--color-ht-light-blue",
+	"--color-ht-pink",
+	"--color-ht-teal",
+];
+
 export default function HomeScreen() {
+	const colors = useCSSVariable(COLOR_VARS) as string[];
+
 	return (
 		<StyledSafeAreaView className="flex-1 bg-background">
 			<ScrollView className="flex-1" contentContainerClassName="flex-1 pt-6 pb-[50px]">
@@ -20,13 +31,14 @@ export default function HomeScreen() {
 				<DaysView />
 
 				<View className="flex-row flex-wrap gap-1.5 px-4 mt-6">
-					{mockHabits.map((habit) => (
+					{mockHabits.map((habit, index) => (
 						<HabitCard
 							key={habit.name}
 							name={habit.name}
 							description={habit.description}
 							icon={habit.icon}
-							isCompleted={true}
+							isCompleted={false}
+							color={colors?.[index % colors.length] ?? "#f7cd63"}
 						/>
 					))}
 				</View>
