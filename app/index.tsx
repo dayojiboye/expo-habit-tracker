@@ -1,7 +1,9 @@
 import { DaysView } from "@/components/days-view";
 import { HabitCard } from "@/components/habit-card";
+import { HabitModal } from "@/components/habit-modal";
 import { mockHabits } from "@/constants/mock-habits";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
+import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,6 +22,7 @@ const COLOR_VARS = [
 
 export default function HomeScreen() {
 	const colors = useCSSVariable(COLOR_VARS) as string[];
+	const [showHabitModal, setShowHabitModal] = useState(false);
 
 	return (
 		<StyledSafeAreaView className="flex-1 bg-background">
@@ -47,9 +50,12 @@ export default function HomeScreen() {
 			<PressableFeedback
 				className="bg-ht-blue absolute right-6 bottom-safe rounded-2xl items-center justify-center size-13 shadow-md"
 				style={{ borderCurve: "continuous" }}
+				onPress={() => setShowHabitModal(true)}
 			>
 				<Icon name="add-fill" color={"#fff"} size={26} />
 			</PressableFeedback>
+
+			<HabitModal isVisible={showHabitModal} onClose={() => setShowHabitModal(false)} />
 		</StyledSafeAreaView>
 	);
 }

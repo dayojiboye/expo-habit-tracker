@@ -15,7 +15,7 @@ export function DaysView() {
 			{getDaysInAWeek().map((date) => (
 				<PressableFeedback
 					key={date}
-					className={cn("items-center justify-center rounded-[18px] p-2 bg-[#f2f2f3] w-13 h-16", {
+					className={cn("items-center justify-center rounded-[18px] p-2 bg-ht-ghost w-13 h-16", {
 						"bg-ht-green": isBefore(date, startOfDay(new Date())),
 						"bg-black": isToday(date),
 					})}

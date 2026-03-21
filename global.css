@@ -64,6 +64,7 @@
 			--ht-orange: #f0935b;
 			--ht-teal: #b7e6e6;
 			--ht-light-blue: #aac6f9;
+			--ht-ghost: #f2f2f3;
 
 			--default: oklch(94% 0.001 286.375);
 			--default-foreground: var(--eclipse);
@@ -136,6 +137,7 @@
 			--ht-orange: #f0935b;
 			--ht-teal: #b7e6e6;
 			--ht-light-blue: #aac6f9;
+			--ht-ghost: #f2f2f3;
 
 			--default: oklch(27.4% 0.006 286.033);
 			--default-foreground: var(--snow);
@@ -185,4 +187,5 @@
 	--color-ht-orange: var(--ht-orange);
 	--color-ht-teal: var(--ht-teal);
 	--color-ht-light-blue: var(--ht-light-blue);
+	--color-ht-ghost: var(--ht-ghost);
 }
