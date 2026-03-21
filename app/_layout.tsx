@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { HeroUINativeProvider } from "heroui-native/provider";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
 import { Uniwind } from "uniwind";
 import "../global.css";
@@ -33,12 +34,14 @@ export default function RootLayout() {
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<HeroUINativeProvider>
-				<Stack>
-					<Stack.Screen name="index" options={{ headerShown: false }} />
-				</Stack>
-				<StatusBar style="auto" />
-			</HeroUINativeProvider>
+			<KeyboardProvider>
+				<HeroUINativeProvider>
+					<Stack>
+						<Stack.Screen name="index" options={{ headerShown: false }} />
+					</Stack>
+					<StatusBar style="auto" />
+				</HeroUINativeProvider>
+			</KeyboardProvider>
 		</GestureHandlerRootView>
 	);
 }

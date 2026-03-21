@@ -6,10 +6,7 @@ import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useCSSVariable, withUniwind } from "uniwind";
-
-const StyledSafeAreaView = withUniwind(SafeAreaView);
+import { useCSSVariable } from "uniwind";
 
 const COLOR_VARS = [
 	"--color-ht-yellow",
@@ -25,8 +22,8 @@ export default function HomeScreen() {
 	const [showHabitModal, setShowHabitModal] = useState(false);
 
 	return (
-		<StyledSafeAreaView className="flex-1 bg-background">
-			<ScrollView className="flex-1" contentContainerClassName="flex-1 pt-6 pb-[50px]">
+		<View className="flex-1 pt-safe bg-background">
+			<ScrollView className="flex-1" contentContainerClassName="grow pt-6 pb-[50px]">
 				<View className="px-4">
 					<Text className="text-3xl text-foreground font-ob-bold">Habits</Text>
 				</View>
@@ -56,6 +53,6 @@ export default function HomeScreen() {
 			</PressableFeedback>
 
 			<HabitModal isVisible={showHabitModal} onClose={() => setShowHabitModal(false)} />
-		</StyledSafeAreaView>
+		</View>
 	);
 }

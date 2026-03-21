@@ -1,0 +1,28 @@
+import { IconName } from "react-native-remix-icon";
+
+export const HabitIcons: IconName[] = [
+	"briefcase-fill",
+	"flashlight-fill",
+	"user-fill",
+	"wallet-3-fill",
+	"restaurant-fill",
+	"airplay-fill",
+	"footprint-fill",
+	"book-fill",
+	"shopping-basket-fill",
+	"t-shirt-fill",
+	"fire-fill",
+	"plant-fill",
+	"keyboard-fill",
+	"image-fill",
+	"music-fill",
+	"hearts-fill",
+	"run-fill",
+	"alarm-fill",
+	"heart-pulse-fill",
+	"drop-fill",
+	"mental-health-fill",
+	"sun-fill",
+	"pencil-fill",
+	"tv-fill",
+];
