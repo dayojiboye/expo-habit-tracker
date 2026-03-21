@@ -26,13 +26,20 @@
 
 	/* Opacity */
 	--opacity-disabled: 0.5;
+
+	/* Fonts */
+	--font-ob-light: "ObLight";
+	--font-ob-regular: "ObRegular";
+	--font-ob-medium: "ObMedium";
+	--font-ob-semibold: "ObSemibold";
+	--font-ob-bold: "ObBold";
 }
 
 @layer theme {
 	:root {
 		@variant light {
 			/* Base Colors */
-			--background: oklch(0.9702 0 0);
+			--background: var(--snow);
 			--foreground: var(--eclipse);
 
 			/* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
@@ -49,7 +56,13 @@
 			--overlay: var(--white);
 			--overlay-foreground: var(--foreground);
 
-			--muted: oklch(0.5517 0.0138 285.94);
+			--muted: #9e9ea0;
+			--ht-blue: #4e55e0;
+			--ht-green: #b8eb6c;
+			--ht-yellow: #f7cd63;
+			--ht-pink: #fc8fc6;
+			--ht-orange: #f0935b;
+			--ht-teal: #b7e6e6;
 
 			--default: oklch(94% 0.001 286.375);
 			--default-foreground: var(--eclipse);
@@ -115,6 +128,12 @@
 			--overlay-foreground: var(--foreground);
 
 			--muted: oklch(70.5% 0.015 286.067);
+			--ht-blue: #4e55e0;
+			--ht-green: #b8eb6c;
+			--ht-yellow: #f7cd63;
+			--ht-pink: #fc8fc6;
+			--ht-orange: #f0935b;
+			--ht-teal: #b7e6e6;
 
 			--default: oklch(27.4% 0.006 286.033);
 			--default-foreground: var(--snow);
@@ -154,4 +173,13 @@
 			--field-shadow: 0 0 0 0 transparent inset; /* Transparent shadow to allow ring utilities to work */
 		}
 	}
+}
+
+@theme inline {
+	--color-ht-blue: var(--ht-blue);
+	--color-ht-green: var(--ht-green);
+	--color-ht-yellow: var(--ht-yellow);
+	--color-ht-pink: var(--ht-pink);
+	--color-ht-orange: var(--ht-orange);
+	--color-ht-teal: var(--ht-teal);
 }

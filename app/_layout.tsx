@@ -1,36 +1,41 @@
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { HeroUINativeProvider } from "heroui-native/provider";
+import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { useUniwind } from "uniwind";
+import { Uniwind } from "uniwind";
 import "../global.css";
 
-export const unstable_settings = {
-	anchor: "(tabs)",
-};
+Uniwind.setTheme("light");
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-	const { theme } = useUniwind();
+	const [loaded, error] = useFonts({
+		ObLight: require("../assets/fonts/ObviouslyDemo-Light.otf"),
+		ObRegular: require("../assets/fonts/ObviouslyDemo-Regular.otf"),
+		ObMedium: require("../assets/fonts/ObviouslyDemo-Medium.otf"),
+		ObSemibold: require("../assets/fonts/ObviouslyDemo-Semibold.otf"),
+		ObBold: require("../assets/fonts/ObviouslyDemo-Bold.otf"),
+	});
+
+	useEffect(() => {
+		if (loaded || error) {
+			SplashScreen.hideAsync();
+		}
+	}, [loaded, error]);
+
+	if (!loaded && !error) {
+		return null;
+	}
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<HeroUINativeProvider>
 				<Stack>
-					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-					<Stack.Screen
-						name="modal"
-						options={{
-							presentation: "modal",
-							title: "Modal",
-							headerStyle: {
-								backgroundColor: theme === "dark" ? "oklch(12% 0.005 285.823)" : "#fff",
-							},
-							headerTitleStyle: {
-								color: theme === "dark" ? "oklch(0.9911 0 0)" : "oklch(0.2103 0.0059 285.89)",
-							},
-						}}
-					/>
+					<Stack.Screen name="index" options={{ headerShown: false }} />
 				</Stack>
 				<StatusBar style="auto" />
 			</HeroUINativeProvider>
