@@ -1,5 +1,4 @@
 import { Habit } from "@/types/habit";
-import {} from "@expo/vector-icons";
 
 export const mockHabits: Habit[] = [
   {
