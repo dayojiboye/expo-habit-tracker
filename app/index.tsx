@@ -1,9 +1,11 @@
 import { DaysView } from "@/components/days-view";
 import { HabitCard } from "@/components/habit-card";
 import { HabitModal } from "@/components/habit-modal";
-import { mockHabits } from "@/constants/mock-habits";
+import { STORED_HABITS } from "@/constants/core";
+import { Habit } from "@/types/habit";
+import * as SecureStore from "expo-secure-store";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
 import { useCSSVariable } from "uniwind";
@@ -20,6 +22,20 @@ const COLOR_VARS = [
 export default function HomeScreen() {
   const colors = useCSSVariable(COLOR_VARS) as string[];
   const [showHabitModal, setShowHabitModal] = useState(false);
+  const [habits, setHabits] = useState<Habit[]>([]);
+
+  function retrieveHabits() {
+    let storedHabits = SecureStore.getItem(STORED_HABITS);
+    if (storedHabits) {
+      setHabits(JSON.parse(storedHabits));
+    } else {
+      console.log("No values stored under this key.");
+    }
+  }
+
+  useEffect(() => {
+    retrieveHabits();
+  }, []);
 
   return (
     <View className="flex-1 pt-safe bg-background">
@@ -31,20 +47,31 @@ export default function HomeScreen() {
           <Text className="text-3xl text-foreground font-ob-bold">Habits</Text>
         </View>
 
-        <DaysView />
+        {habits.length === 0 ? (
+          <View className="h-[200px] items-center justify-center px-4">
+            <Text className="text-center font-ob-medium text-muted text-base leading-relaxed">
+              Every journey starts somewhere. Add your first habit now. Tap + to
+              create one.
+            </Text>
+          </View>
+        ) : (
+          <>
+            <DaysView />
 
-        <View className="flex-row flex-wrap gap-1.5 px-4 mt-6">
-          {mockHabits.map((habit, index) => (
-            <HabitCard
-              key={habit.name}
-              name={habit.name}
-              description={habit.description}
-              icon={habit.icon}
-              isCompleted={false}
-              color={colors?.[index % colors.length] ?? "#f7cd63"}
-            />
-          ))}
-        </View>
+            <View className="flex-row flex-wrap gap-1.5 px-4 mt-6">
+              {habits.map((habit, index) => (
+                <HabitCard
+                  key={habit.name}
+                  name={habit.name}
+                  description={habit.description}
+                  icon={habit.icon}
+                  isCompleted={false}
+                  color={colors?.[index % colors.length] ?? "#f7cd63"}
+                />
+              ))}
+            </View>
+          </>
+        )}
       </ScrollView>
 
       <PressableFeedback
@@ -58,6 +85,7 @@ export default function HomeScreen() {
       <HabitModal
         isVisible={showHabitModal}
         onClose={() => setShowHabitModal(false)}
+        habits={habits}
       />
     </View>
   );

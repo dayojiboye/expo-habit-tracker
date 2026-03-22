@@ -1,5 +1,8 @@
+import { STORED_HABITS } from "@/constants/core";
 import { HabitIcons } from "@/constants/habit-icons";
+import { Habit } from "@/types/habit";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import {
   Button,
@@ -9,6 +12,7 @@ import {
   Label,
   PressableFeedback,
   TextField,
+  useToast,
 } from "heroui-native";
 import { Controller, useForm } from "react-hook-form";
 import { Dimensions, Modal, Pressable, Text, View } from "react-native";
@@ -20,6 +24,7 @@ import { z } from "zod";
 interface HabitModalProps {
   isVisible: boolean;
   onClose: () => void;
+  habits: Habit[];
 }
 
 const COLOR_VARS = [
@@ -37,10 +42,11 @@ const addHabitFormSchema = z.object({
   icon: z.custom<IconName>((val) => typeof val === "string"),
 });
 
-export function HabitModal({ isVisible, onClose }: HabitModalProps) {
+export function HabitModal({ isVisible, onClose, habits }: HabitModalProps) {
   const colors = useCSSVariable(COLOR_VARS) as string[];
   const { width } = Dimensions.get("window");
   const ITEM_SIZE = (width - 32 - 20) / 4;
+  const { toast } = useToast();
 
   const addHabitForm = useForm<z.infer<typeof addHabitFormSchema>>({
     resolver: zodResolver(addHabitFormSchema),
@@ -57,7 +63,35 @@ export function HabitModal({ isVisible, onClose }: HabitModalProps) {
   }
 
   function onSubmit(values: z.infer<typeof addHabitFormSchema>) {
-    console.log(values);
+    if (
+      habits.some(
+        (habit) => habit.name.toLowerCase() === values.name.toLowerCase(),
+      )
+    ) {
+      toast.show({
+        variant: "danger",
+        label: "This habit already exists",
+      });
+      return;
+    }
+
+    SecureStore.setItem(
+      STORED_HABITS,
+      JSON.stringify([
+        ...habits,
+        {
+          ...values,
+          daysCompleted: [],
+        },
+      ]),
+    );
+
+    toast.show({
+      variant: "success",
+      label: "Habit added successfully",
+    });
+
+    handleClose();
   }
 
   return (
@@ -84,6 +118,7 @@ export function HabitModal({ isVisible, onClose }: HabitModalProps) {
             <KeyboardAwareScrollView
               className="flex-1"
               contentContainerClassName="grow px-4 pt-4 gap-3"
+              keyboardShouldPersistTaps="always"
             >
               <Controller
                 control={addHabitForm.control}
