@@ -23,6 +23,7 @@ export default function HomeScreen() {
   const colors = useCSSVariable(COLOR_VARS) as string[];
   const [showHabitModal, setShowHabitModal] = useState(false);
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [habitToEdit, setHabitToEdit] = useState<Habit | null>(null);
 
   function retrieveHabits() {
     let storedHabits = SecureStore.getItem(STORED_HABITS);
@@ -49,7 +50,7 @@ export default function HomeScreen() {
 
         {habits.length === 0 ? (
           <View className="h-[200px] items-center justify-center px-4">
-            <Text className="text-center font-ob-medium text-muted text-base leading-relaxed">
+            <Text className="text-center font-ob-regular text-muted text-base leading-relaxed">
               Every journey starts somewhere. Add your first habit now. Tap + to
               create one.
             </Text>
@@ -67,6 +68,7 @@ export default function HomeScreen() {
                   icon={habit.icon}
                   isCompleted={false}
                   color={colors?.[index % colors.length] ?? "#f7cd63"}
+                  onPress={() => setHabitToEdit(habit)}
                 />
               ))}
             </View>
@@ -83,9 +85,14 @@ export default function HomeScreen() {
       </PressableFeedback>
 
       <HabitModal
-        isVisible={showHabitModal}
-        onClose={() => setShowHabitModal(false)}
+        isVisible={showHabitModal || !!habitToEdit}
         habits={habits}
+        habit={habitToEdit}
+        setHabits={setHabits}
+        onClose={() => {
+          setShowHabitModal(false);
+          setHabitToEdit(null);
+        }}
       />
     </View>
   );

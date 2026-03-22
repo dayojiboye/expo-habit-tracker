@@ -4,10 +4,11 @@ import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
 
-type HabitCardProps = { isCompleted: boolean; color: string } & Omit<
-  Habit,
-  "daysCompleted"
->;
+type HabitCardProps = {
+  isCompleted: boolean;
+  color: string;
+  onPress: () => void;
+} & Omit<Habit, "daysCompleted">;
 
 export function HabitCard({
   name,
@@ -15,12 +16,14 @@ export function HabitCard({
   icon,
   isCompleted,
   color,
+  onPress,
 }: HabitCardProps) {
   const mutedColor = useThemeColor("muted");
 
   return (
     <PressableFeedback
-      className="w-[49%] min-h-[110px] rounded-[16px] p-3"
+      onPress={onPress}
+      className="w-[49%] min-h-[110px] rounded-[16px] p-3 gap-5"
       style={{
         borderCurve: "continuous",
         backgroundColor: isCompleted ? "#f2f2f3" : color,
@@ -40,7 +43,7 @@ export function HabitCard({
         </Checkbox>
       </View>
 
-      <View className="mt-auto">
+      <View>
         <Text
           className={cn("font-ob-medium text-sm text-foreground", {
             "text-muted": isCompleted,

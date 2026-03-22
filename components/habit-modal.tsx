@@ -14,6 +14,7 @@ import {
   TextField,
   useToast,
 } from "heroui-native";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Dimensions, Modal, Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
@@ -25,6 +26,8 @@ interface HabitModalProps {
   isVisible: boolean;
   onClose: () => void;
   habits: Habit[];
+  habit: Habit | null;
+  setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
 }
 
 const COLOR_VARS = [
@@ -42,7 +45,19 @@ const addHabitFormSchema = z.object({
   icon: z.custom<IconName>((val) => typeof val === "string"),
 });
 
-export function HabitModal({ isVisible, onClose, habits }: HabitModalProps) {
+const defaultFormValues: z.infer<typeof addHabitFormSchema> = {
+  name: "",
+  description: "",
+  icon: "briefcase-fill",
+};
+
+export function HabitModal({
+  isVisible,
+  onClose,
+  habits,
+  habit,
+  setHabits,
+}: HabitModalProps) {
   const colors = useCSSVariable(COLOR_VARS) as string[];
   const { width } = Dimensions.get("window");
   const ITEM_SIZE = (width - 32 - 20) / 4;
@@ -50,20 +65,56 @@ export function HabitModal({ isVisible, onClose, habits }: HabitModalProps) {
 
   const addHabitForm = useForm<z.infer<typeof addHabitFormSchema>>({
     resolver: zodResolver(addHabitFormSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      icon: "briefcase-fill",
-    },
+    defaultValues: defaultFormValues,
   });
 
   function handleClose() {
-    addHabitForm.reset();
+    addHabitForm.reset(defaultFormValues);
     onClose();
+  }
+
+  function createHabit(values: z.infer<typeof addHabitFormSchema>) {
+    SecureStore.setItem(
+      STORED_HABITS,
+      JSON.stringify([
+        {
+          ...values,
+          daysCompleted: [],
+        },
+        ...habits,
+      ]),
+    );
+
+    toast.show({
+      variant: "success",
+      label: "Habit added successfully",
+    });
+  }
+
+  function updateHabit(values: z.infer<typeof addHabitFormSchema>) {
+    if (!habit) return;
+    const habitIndex = habits.findIndex(
+      (h) => h.name.toLowerCase() === habit.name.toLowerCase(),
+    );
+
+    if (habitIndex === -1) return;
+
+    const updatedHabits = habits.map((h, i) => {
+      return i === habitIndex ? { ...h, ...values } : h;
+    });
+
+    setHabits(updatedHabits);
+    SecureStore.setItem(STORED_HABITS, JSON.stringify(updatedHabits));
+
+    toast.show({
+      variant: "success",
+      label: "Habit updated successfully",
+    });
   }
 
   function onSubmit(values: z.infer<typeof addHabitFormSchema>) {
     if (
+      !habit &&
       habits.some(
         (habit) => habit.name.toLowerCase() === values.name.toLowerCase(),
       )
@@ -75,24 +126,21 @@ export function HabitModal({ isVisible, onClose, habits }: HabitModalProps) {
       return;
     }
 
-    SecureStore.setItem(
-      STORED_HABITS,
-      JSON.stringify([
-        ...habits,
-        {
-          ...values,
-          daysCompleted: [],
-        },
-      ]),
-    );
-
-    toast.show({
-      variant: "success",
-      label: "Habit added successfully",
-    });
+    if (habit) updateHabit(values);
+    else createHabit(values);
 
     handleClose();
   }
+
+  useEffect(() => {
+    if (habit) {
+      addHabitForm.reset({
+        name: habit.name,
+        description: habit.description,
+        icon: habit.icon,
+      });
+    }
+  }, [habit, addHabitForm]);
 
   return (
     <View>
