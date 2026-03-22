@@ -1,24 +1,54 @@
+import { STORED_HABITS } from "@/constants/core";
 import { Habit } from "@/types/habit";
+import { format } from "date-fns";
+import * as SecureStore from "expo-secure-store";
 import { Checkbox, cn, useThemeColor } from "heroui-native";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Text, View } from "react-native";
 import Icon from "react-native-remix-icon";
 
 type HabitCardProps = {
-  isCompleted: boolean;
+  habit: Habit;
+  day: Date;
   color: string;
   onPress: () => void;
-} & Omit<Habit, "daysCompleted">;
+  habits: Habit[];
+  setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
+};
 
 export function HabitCard({
-  name,
-  description,
-  icon,
-  isCompleted,
+  habit,
+  day,
   color,
   onPress,
+  habits,
+  setHabits,
 }: HabitCardProps) {
   const mutedColor = useThemeColor("muted");
+  const isCompleted = habit.daysCompleted.includes(format(day, "yyyy-MM-dd"));
+
+  function toggleCompleted() {
+    const habitIndex = habits.findIndex(
+      (h) => h.name.toLowerCase() === habit.name.toLowerCase(),
+    );
+
+    if (habitIndex === -1) return;
+
+    const formattedDay = format(day, "yyyy-MM-dd");
+
+    const updatedDaysCompleted = isCompleted
+      ? habit.daysCompleted.filter((d) => d !== formattedDay)
+      : [formattedDay, ...habit.daysCompleted];
+
+    const updatedHabits = habits.map((h, i) => {
+      return i === habitIndex
+        ? { ...h, daysCompleted: updatedDaysCompleted }
+        : h;
+    });
+
+    setHabits(updatedHabits);
+    SecureStore.setItem(STORED_HABITS, JSON.stringify(updatedHabits));
+  }
 
   return (
     <PressableFeedback
@@ -30,9 +60,14 @@ export function HabitCard({
       }}
     >
       <View className="flex-row items-start justify-between">
-        <Icon name={icon} size={26} color={isCompleted ? mutedColor : "#000"} />
+        <Icon
+          name={habit.icon}
+          size={26}
+          color={isCompleted ? mutedColor : "#000"}
+        />
         <Checkbox
           isSelected={isCompleted}
+          onSelectedChange={() => toggleCompleted()}
           className="size-5 rounded-full border-[1.5px] border-black bg-transparent"
         >
           {({ isSelected }) => (
@@ -52,7 +87,7 @@ export function HabitCard({
             },
           )}
         >
-          {name}
+          {habit.name}
         </Text>
         <Text
           className={cn(
@@ -62,7 +97,7 @@ export function HabitCard({
             },
           )}
         >
-          {description}
+          {habit.description}
         </Text>
       </View>
     </PressableFeedback>

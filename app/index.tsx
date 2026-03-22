@@ -3,6 +3,7 @@ import { HabitCard } from "@/components/habit-card";
 import { HabitModal } from "@/components/habit-modal";
 import { STORED_HABITS } from "@/constants/core";
 import { Habit } from "@/types/habit";
+import { resetHabitsIfNewWeek } from "@/utils/helpers";
 import * as SecureStore from "expo-secure-store";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { useEffect, useState } from "react";
@@ -24,18 +25,13 @@ export default function HomeScreen() {
   const [showHabitModal, setShowHabitModal] = useState(false);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [habitToEdit, setHabitToEdit] = useState<Habit | null>(null);
-
-  function retrieveHabits() {
-    let storedHabits = SecureStore.getItem(STORED_HABITS);
-    if (storedHabits) {
-      setHabits(JSON.parse(storedHabits));
-    } else {
-      console.log("No values stored under this key.");
-    }
-  }
+  const [day, setDay] = useState(new Date());
 
   useEffect(() => {
-    retrieveHabits();
+    const storedHabits = SecureStore.getItem(STORED_HABITS);
+    const _habits = storedHabits ? JSON.parse(storedHabits) : [];
+    const updated = resetHabitsIfNewWeek(_habits);
+    setHabits(updated);
   }, []);
 
   return (
@@ -57,18 +53,18 @@ export default function HomeScreen() {
           </View>
         ) : (
           <>
-            <DaysView />
+            <DaysView day={day} setDay={setDay} />
 
             <View className="flex-row flex-wrap gap-1.5 px-4 mt-6">
               {habits.map((habit, index) => (
                 <HabitCard
                   key={habit.name}
-                  name={habit.name}
-                  description={habit.description}
-                  icon={habit.icon}
-                  isCompleted={false}
+                  habit={habit}
+                  day={day}
                   color={colors?.[index % colors.length] ?? "#f7cd63"}
                   onPress={() => setHabitToEdit(habit)}
+                  habits={habits}
+                  setHabits={setHabits}
                 />
               ))}
             </View>

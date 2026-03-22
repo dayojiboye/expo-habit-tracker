@@ -1,1 +1,2 @@
 export const STORED_HABITS = "STORED_HABITS";
+export const LAST_RESET_KEY = "LAST_RESET_KEY";
