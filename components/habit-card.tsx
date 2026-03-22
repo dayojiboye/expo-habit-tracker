@@ -43,18 +43,24 @@ export function HabitCard({
         </Checkbox>
       </View>
 
-      <View>
+      <View className="gap-y-0.5">
         <Text
-          className={cn("font-ob-medium text-sm text-foreground", {
-            "text-muted": isCompleted,
-          })}
+          className={cn(
+            "font-ob-medium text-sm text-foreground leading-tight",
+            {
+              "text-muted": isCompleted,
+            },
+          )}
         >
           {name}
         </Text>
         <Text
-          className={cn("font-ob-regular text-xs text-foreground", {
-            "text-muted": isCompleted,
-          })}
+          className={cn(
+            "font-ob-regular text-xs text-foreground leading-tight",
+            {
+              "text-muted": isCompleted,
+            },
+          )}
         >
           {description}
         </Text>

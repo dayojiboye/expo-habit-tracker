@@ -50,7 +50,7 @@ export default function HomeScreen() {
 
         {habits.length === 0 ? (
           <View className="h-[200px] items-center justify-center px-4">
-            <Text className="text-center font-ob-regular text-muted text-base leading-relaxed">
+            <Text className="text-center font-ob-regular text-muted text-sm leading-relaxed">
               Every journey starts somewhere. Add your first habit now. Tap + to
               create one.
             </Text>

@@ -74,20 +74,20 @@ export function HabitModal({
   }
 
   function createHabit(values: z.infer<typeof addHabitFormSchema>) {
-    SecureStore.setItem(
-      STORED_HABITS,
-      JSON.stringify([
-        {
-          ...values,
-          daysCompleted: [],
-        },
-        ...habits,
-      ]),
-    );
+    const updatedHabits = [
+      {
+        ...values,
+        daysCompleted: [],
+      },
+      ...habits,
+    ];
+
+    setHabits(updatedHabits);
+    SecureStore.setItem(STORED_HABITS, JSON.stringify(updatedHabits));
 
     toast.show({
       variant: "success",
-      label: "Habit added successfully",
+      label: "Habit created successfully",
     });
   }
 
@@ -110,6 +110,27 @@ export function HabitModal({
       variant: "success",
       label: "Habit updated successfully",
     });
+  }
+
+  function deleteHabit() {
+    if (!habit) return;
+    const habitIndex = habits.findIndex(
+      (h) => h.name.toLowerCase() === habit.name.toLowerCase(),
+    );
+
+    if (habitIndex === -1) return;
+
+    const updatedHabits = habits.filter((_, i) => i !== habitIndex);
+
+    setHabits(updatedHabits);
+    SecureStore.setItem(STORED_HABITS, JSON.stringify(updatedHabits));
+
+    toast.show({
+      variant: "success",
+      label: "Habit deleted successfully",
+    });
+
+    handleClose();
   }
 
   function onSubmit(values: z.infer<typeof addHabitFormSchema>) {
@@ -159,7 +180,7 @@ export function HabitModal({
                 <Icon name="close-fill" size={20} />
               </Pressable>
               <Text className="text-foreground font-ob-semibold text-xl">
-                Let&apos;s start a new habit
+                {!!habit ? "Edit habit" : "Let's start a new habit"}
               </Text>
             </View>
 
@@ -284,7 +305,7 @@ export function HabitModal({
               />
             </KeyboardAwareScrollView>
 
-            <View className="h-25 pt-4 pb-safe bg-background px-4 justify-center">
+            <View className="pt-4 pb-safe bg-background px-4 justify-center gap-2">
               <Button
                 size="lg"
                 className="bg-ht-blue rounded-[16px]"
@@ -293,9 +314,24 @@ export function HabitModal({
                 onPress={addHabitForm.handleSubmit(onSubmit)}
               >
                 <Button.Label className="font-ob-medium text-sm">
-                  Add Habit
+                  {!!habit ? "Update Habit" : "Add Habit"}
                 </Button.Label>
               </Button>
+
+              {habit ? (
+                <Button
+                  size="lg"
+                  variant="danger"
+                  className="rounded-[16px]"
+                  feedbackVariant="scale"
+                  style={{ borderCurve: "continuous" }}
+                  onPress={deleteHabit}
+                >
+                  <Button.Label className="font-ob-medium text-sm">
+                    Delete Habit
+                  </Button.Label>
+                </Button>
+              ) : null}
             </View>
           </View>
         </View>
