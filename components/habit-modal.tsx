@@ -4,16 +4,7 @@ import { Habit } from "@/types/habit";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
-import {
-  Button,
-  cn,
-  FieldError,
-  Input,
-  Label,
-  PressableFeedback,
-  TextField,
-  useToast,
-} from "heroui-native";
+import { Button, cn, FieldError, Input, Label, PressableFeedback, TextField, useToast } from "heroui-native";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Dimensions, Modal, Pressable, Text, View } from "react-native";
@@ -51,13 +42,7 @@ const defaultFormValues: z.infer<typeof addHabitFormSchema> = {
   icon: "briefcase-fill",
 };
 
-export function HabitModal({
-  isVisible,
-  onClose,
-  habits,
-  habit,
-  setHabits,
-}: HabitModalProps) {
+export function HabitModal({ isVisible, onClose, habits, habit, setHabits }: HabitModalProps) {
   const colors = useCSSVariable(COLOR_VARS) as string[];
   const { width } = Dimensions.get("window");
   const ITEM_SIZE = (width - 32 - 20) / 4;
@@ -93,9 +78,7 @@ export function HabitModal({
 
   function updateHabit(values: z.infer<typeof addHabitFormSchema>) {
     if (!habit) return;
-    const habitIndex = habits.findIndex(
-      (h) => h.name.toLowerCase() === habit.name.toLowerCase(),
-    );
+    const habitIndex = habits.findIndex((h) => h.name.toLowerCase() === habit.name.toLowerCase());
 
     if (habitIndex === -1) return;
 
@@ -114,9 +97,7 @@ export function HabitModal({
 
   function deleteHabit() {
     if (!habit) return;
-    const habitIndex = habits.findIndex(
-      (h) => h.name.toLowerCase() === habit.name.toLowerCase(),
-    );
+    const habitIndex = habits.findIndex((h) => h.name.toLowerCase() === habit.name.toLowerCase());
 
     if (habitIndex === -1) return;
 
@@ -134,12 +115,7 @@ export function HabitModal({
   }
 
   function onSubmit(values: z.infer<typeof addHabitFormSchema>) {
-    if (
-      !habit &&
-      habits.some(
-        (habit) => habit.name.toLowerCase() === values.name.toLowerCase(),
-      )
-    ) {
+    if (!habit && habits.some((habit) => habit.name.toLowerCase() === values.name.toLowerCase())) {
       toast.show({
         variant: "danger",
         label: "This habit already exists",
@@ -165,18 +141,15 @@ export function HabitModal({
 
   return (
     <View>
-      <Modal visible={isVisible} animationType="slide" transparent={true}>
+      <Modal visible={isVisible} animationType="slide" transparent={true} statusBarTranslucent>
         <StatusBar style="light" backgroundColor="transparent" translucent />
-        <View className="size-full bg-black absolute top-0 pt-safe">
+        <View className="size-full android:bg-transparent bg-black absolute top-0 pt-safe">
           <View
             className="bg-background rounded-tl-4xl rounded-tr-4xl flex-1 pt-5"
             style={{ borderCurve: "continuous" }}
           >
             <View className="flex-row gap-x-6 items-center px-4">
-              <Pressable
-                className="bg-ht-ghost rounded-full size-8 items-center justify-center"
-                onPress={handleClose}
-              >
+              <Pressable className="bg-ht-ghost rounded-full size-8 items-center justify-center" onPress={handleClose}>
                 <Icon name="close-fill" size={20} />
               </Pressable>
               <Text className="text-foreground font-ob-semibold text-xl">
@@ -195,9 +168,7 @@ export function HabitModal({
                 render={({ field, fieldState }) => (
                   <TextField className="gap-1" isInvalid={fieldState.invalid}>
                     <Label className="p-0">
-                      <Label.Text className="font-ob-regular text-foreground text-sm">
-                        Name
-                      </Label.Text>
+                      <Label.Text className="font-ob-regular text-foreground text-sm">Name</Label.Text>
                     </Label>
                     <Input
                       placeholder="Type habit name"
@@ -205,8 +176,7 @@ export function HabitModal({
                         "font-ob-regular border-ht-ghost bg-ht-ghost rounded-[18px] border-[2px]",
                         "focus:bg-background focus:border-ht-blue text-sm leading-snug",
                         {
-                          "border-danger focus:border-danger":
-                            fieldState.invalid,
+                          "border-danger focus:border-danger": fieldState.invalid,
                         },
                       )}
                       selectionColor={"#000"}
@@ -232,9 +202,7 @@ export function HabitModal({
                 render={({ field, fieldState }) => (
                   <TextField className="gap-1" isInvalid={fieldState.invalid}>
                     <Label className="p-0">
-                      <Label.Text className="font-ob-regular text-foreground text-sm">
-                        Description
-                      </Label.Text>
+                      <Label.Text className="font-ob-regular text-foreground text-sm">Description</Label.Text>
                     </Label>
                     <Input
                       placeholder="Describe habit"
@@ -242,8 +210,7 @@ export function HabitModal({
                         "font-ob-regular border-ht-ghost bg-ht-ghost rounded-[18px] border-[2px]",
                         "focus:bg-background focus:border-ht-blue text-sm leading-snug",
                         {
-                          "border-danger focus:border-danger":
-                            fieldState.invalid,
+                          "border-danger focus:border-danger": fieldState.invalid,
                         },
                       )}
                       selectionColor={"#000"}
@@ -269,22 +236,18 @@ export function HabitModal({
                 render={({ field, fieldState }) => (
                   <TextField>
                     <Label className="p-0">
-                      <Label.Text className="font-ob-regular text-foreground text-sm">
-                        Icon
-                      </Label.Text>
+                      <Label.Text className="font-ob-regular text-foreground text-sm">Icon</Label.Text>
                     </Label>
                     <View className="flex-row flex-wrap gap-1.5 justify-between">
                       {HabitIcons.map((icon, index) => (
                         <PressableFeedback
                           key={icon}
-                          className={cn(
-                            "rounded-[20px] items-center justify-center border-[3px] border-transparent",
-                            { "border-accent": field.value === icon },
-                          )}
+                          className={cn("rounded-[20px] items-center justify-center border-[3px] border-transparent", {
+                            "border-accent": field.value === icon,
+                          })}
                           style={{
                             borderCurve: "continuous",
-                            backgroundColor:
-                              colors?.[index % colors.length] ?? "#f7cd63",
+                            backgroundColor: colors?.[index % colors.length] ?? "#f7cd63",
                             width: ITEM_SIZE,
                             height: 80,
                           }}
@@ -305,7 +268,7 @@ export function HabitModal({
               />
             </KeyboardAwareScrollView>
 
-            <View className="pt-4 pb-safe bg-background px-4 justify-center gap-2">
+            <View className="pt-4 ios:pb-safe bg-background px-4 justify-center gap-2">
               <Button
                 size="lg"
                 className="bg-ht-blue rounded-[16px]"
@@ -313,9 +276,7 @@ export function HabitModal({
                 style={{ borderCurve: "continuous" }}
                 onPress={addHabitForm.handleSubmit(onSubmit)}
               >
-                <Button.Label className="font-ob-medium text-sm">
-                  {!!habit ? "Update Habit" : "Add Habit"}
-                </Button.Label>
+                <Button.Label className="font-ob-medium text-sm">{!!habit ? "Update Habit" : "Add Habit"}</Button.Label>
               </Button>
 
               {habit ? (
@@ -327,9 +288,7 @@ export function HabitModal({
                   style={{ borderCurve: "continuous" }}
                   onPress={deleteHabit}
                 >
-                  <Button.Label className="font-ob-medium text-sm">
-                    Delete Habit
-                  </Button.Label>
+                  <Button.Label className="font-ob-medium text-sm">Delete Habit</Button.Label>
                 </Button>
               ) : null}
             </View>

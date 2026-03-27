@@ -16,21 +16,12 @@ type HabitCardProps = {
   setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
 };
 
-export function HabitCard({
-  habit,
-  day,
-  color,
-  onPress,
-  habits,
-  setHabits,
-}: HabitCardProps) {
+export function HabitCard({ habit, day, color, onPress, habits, setHabits }: HabitCardProps) {
   const mutedColor = useThemeColor("muted");
   const isCompleted = habit.daysCompleted.includes(format(day, "yyyy-MM-dd"));
 
   function toggleCompleted() {
-    const habitIndex = habits.findIndex(
-      (h) => h.name.toLowerCase() === habit.name.toLowerCase(),
-    );
+    const habitIndex = habits.findIndex((h) => h.name.toLowerCase() === habit.name.toLowerCase());
 
     if (habitIndex === -1) return;
 
@@ -41,9 +32,7 @@ export function HabitCard({
       : [formattedDay, ...habit.daysCompleted];
 
     const updatedHabits = habits.map((h, i) => {
-      return i === habitIndex
-        ? { ...h, daysCompleted: updatedDaysCompleted }
-        : h;
+      return i === habitIndex ? { ...h, daysCompleted: updatedDaysCompleted } : h;
     });
 
     setHabits(updatedHabits);
@@ -60,15 +49,14 @@ export function HabitCard({
       }}
     >
       <View className="flex-row items-start justify-between">
-        <Icon
-          name={habit.icon}
-          size={26}
-          color={isCompleted ? mutedColor : "#000"}
-        />
+        <Icon name={habit.icon} size={26} color={isCompleted ? mutedColor : "#000"} />
         <Checkbox
           isSelected={isCompleted}
+          animation="disable-all"
           onSelectedChange={() => toggleCompleted()}
-          className="size-5 rounded-full border-[1.5px] border-black bg-transparent"
+          className={cn("size-5 rounded-full border-[1.5px] border-black bg-transparent", {
+            "bg-black": isCompleted,
+          })}
         >
           {({ isSelected }) => (
             <Checkbox.Indicator className={cn({ "bg-black": isSelected })}>
@@ -80,22 +68,16 @@ export function HabitCard({
 
       <View className="gap-y-0.5">
         <Text
-          className={cn(
-            "font-ob-medium text-sm text-foreground leading-tight",
-            {
-              "text-muted": isCompleted,
-            },
-          )}
+          className={cn("font-ob-medium text-sm text-foreground leading-tight", {
+            "text-muted": isCompleted,
+          })}
         >
           {habit.name}
         </Text>
         <Text
-          className={cn(
-            "font-ob-regular text-xs text-foreground leading-tight",
-            {
-              "text-muted": isCompleted,
-            },
-          )}
+          className={cn("font-ob-regular text-xs text-foreground leading-tight", {
+            "text-muted": isCompleted,
+          })}
         >
           {habit.description}
         </Text>

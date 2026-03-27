@@ -36,10 +36,7 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 pt-safe bg-background">
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="grow pt-6 pb-[50px]"
-      >
+      <ScrollView className="flex-1" contentContainerClassName="grow pt-6 pb-[50px]">
         <View className="px-4">
           <Text className="text-3xl text-foreground font-ob-bold">Habits</Text>
         </View>
@@ -47,8 +44,7 @@ export default function HomeScreen() {
         {habits.length === 0 ? (
           <View className="h-[200px] items-center justify-center px-4">
             <Text className="text-center font-ob-regular text-muted text-sm leading-relaxed">
-              Every journey starts somewhere. Add your first habit now. Tap + to
-              create one.
+              Every journey starts somewhere. Add your first habit now. Tap + to create one.
             </Text>
           </View>
         ) : (
