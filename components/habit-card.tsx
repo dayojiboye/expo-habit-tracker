@@ -18,14 +18,13 @@ type HabitCardProps = {
 
 export function HabitCard({ habit, day, color, onPress, habits, setHabits }: HabitCardProps) {
   const mutedColor = useThemeColor("muted");
-  const isCompleted = habit.daysCompleted.includes(format(day, "yyyy-MM-dd"));
+  const formattedDay = format(day, "yyyy-MM-dd");
+  const isCompleted = habit.daysCompleted.includes(formattedDay);
 
   function toggleCompleted() {
     const habitIndex = habits.findIndex((h) => h.name.toLowerCase() === habit.name.toLowerCase());
 
     if (habitIndex === -1) return;
-
-    const formattedDay = format(day, "yyyy-MM-dd");
 
     const updatedDaysCompleted = isCompleted
       ? habit.daysCompleted.filter((d) => d !== formattedDay)
