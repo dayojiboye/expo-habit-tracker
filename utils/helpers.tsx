@@ -1,16 +1,13 @@
 import { LAST_RESET_KEY, STORED_HABITS } from "@/constants/core";
 import { Habit } from "@/types/habit";
-import { eachDayOfInterval, endOfWeek, format, startOfWeek } from "date-fns";
+import { eachDayOfInterval, format, startOfWeek, subDays } from "date-fns";
 import * as SecureStore from "expo-secure-store";
 
-export function getDaysInAWeek(dateFormat = "yyyy-MM-dd") {
+export function getLast7Days(dateFormat = "yyyy-MM-dd") {
   const today = new Date();
-  const start = startOfWeek(today, { weekStartsOn: 1 });
-  const end = endOfWeek(today, { weekStartsOn: 1 });
+  const start = subDays(today, 6);
 
-  return eachDayOfInterval({ start, end }).map((date) =>
-    format(date, dateFormat),
-  );
+  return eachDayOfInterval({ start, end: today }).map((date) => format(date, dateFormat));
 }
 
 function getWeekKey() {

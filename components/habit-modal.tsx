@@ -275,6 +275,7 @@ export function HabitModal({ isVisible, onClose, habits, habit, setHabits }: Hab
                 feedbackVariant="scale"
                 style={{ borderCurve: "continuous" }}
                 onPress={addHabitForm.handleSubmit(onSubmit)}
+                isDisabled={!addHabitForm.formState.isDirty}
               >
                 <Button.Label className="font-ob-medium text-sm">{!!habit ? "Update Habit" : "Add Habit"}</Button.Label>
               </Button>
