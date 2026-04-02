@@ -3,7 +3,6 @@ import { HabitCard } from "@/components/habit-card";
 import { HabitModal } from "@/components/habit-modal";
 import { STORED_HABITS } from "@/constants/core";
 import { Habit } from "@/types/habit";
-import { resetHabitsIfNewWeek } from "@/utils/helpers";
 import * as SecureStore from "expo-secure-store";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { useEffect, useState } from "react";
@@ -30,8 +29,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const storedHabits = SecureStore.getItem(STORED_HABITS);
     const _habits = storedHabits ? JSON.parse(storedHabits) : [];
-    const updated = resetHabitsIfNewWeek(_habits);
-    setHabits(updated);
+    setHabits(_habits);
   }, []);
 
   return (
